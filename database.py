@@ -76,6 +76,47 @@ def get_all_jobs(conn) -> list:
         for r in rows
     ]
 
+# ADD these two functions to the bottom of your existing database.py
+# Everything else stays exactly the same
+
+def get_jobs_filtered(conn, company: str = None, role: str = None) -> list:
+    """Filter jobs by company and/or role keyword."""
+    query = "SELECT title, company, score, reason, link, notified_at FROM seen_jobs"
+    params = []
+    conditions = []
+
+    if company:
+        conditions.append("LOWER(company) = LOWER(?)")
+        params.append(company)
+    if role:
+        conditions.append("LOWER(title) LIKE LOWER(?)")
+        params.append(f"%{role}%")
+
+    if conditions:
+        query += " WHERE " + " AND ".join(conditions)
+
+    query += " ORDER BY notified_at DESC"
+
+    rows = conn.execute(query, params).fetchall()
+    return [
+        {
+            "title":       r[0],
+            "company":     r[1],
+            "score":       r[2],
+            "reason":      r[3],
+            "link":        r[4],
+            "notified_at": r[5]
+        }
+        for r in rows
+    ]
+
+
+def get_company_list(conn) -> list:
+    """Return distinct company names for frontend filter dropdown."""
+    rows = conn.execute(
+        "SELECT DISTINCT company FROM seen_jobs ORDER BY company"
+    ).fetchall()
+    return [r[0] for r in rows]
 
 if __name__ == "__main__":
     # Quick test — run: python database.py
