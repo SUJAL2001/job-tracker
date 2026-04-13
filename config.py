@@ -25,26 +25,22 @@ COMPANIES = [
     {"name": "ServiceNow",   "url": "https://careers.servicenow.com/careers/jobs",                "type": "dynamic"},
 ]
 
-# ---- Matching ----
-MATCH_THRESHOLD = 70          # Only notify if AI match score >= this value (0-100)
-RESUME_PATH     = "resume.pdf"  # Path to your resume PDF
+from dotenv import load_dotenv
+import os
 
-# ---- Scheduling ----
-CHECK_INTERVAL_HOURS = 24    # How often to check for new jobs
+load_dotenv()  # loads the .env file automatically
 
-# ---- Notification: Email ----
-NOTIFY_EMAIL      = "sujalkumardas3@gmail.com"   # Where to send alerts
-SENDER_EMAIL      = "your_bot@gmail.com"     # Gmail account used to send
-SENDER_PASSWORD   = "your_app_password"      # Gmail App Password (NOT your real password)
-                                              # Generate at: myaccount.google.com/apppasswords
+GEMINI_API_KEY    = os.getenv("GEMINI_API_KEY")
+NOTIFY_EMAIL      = os.getenv("NOTIFY_EMAIL")
+SENDER_EMAIL      = os.getenv("SENDER_EMAIL")
+SENDER_PASSWORD   = os.getenv("SENDER_PASSWORD")
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+TELEGRAM_CHAT_ID   = os.getenv("TELEGRAM_CHAT_ID")
 
-# ---- Notification: Telegram (optional) ----
-TELEGRAM_ENABLED  = False
-TELEGRAM_BOT_TOKEN = "your_bot_token"        # From @BotFather on Telegram
-TELEGRAM_CHAT_ID   = "your_chat_id"          # Your personal chat ID
+# These are not secrets, keep them directly here
+MATCH_THRESHOLD      = 70
+CHECK_INTERVAL_HOURS = 6
+RESUME_PATH          = "resume.pdf"
+DB_PATH              = "jobs.db"
+TELEGRAM_ENABLED     = False
 
-# ---- Gemini API ----
-GEMINI_API_KEY = "AIzaSyA_fiapXaWP5setfZE7WmVl_1IYhd9QFoA"
-
-# ---- Database ----
-DB_PATH = "jobs.db"
